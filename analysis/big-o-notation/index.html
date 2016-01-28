@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Big O Notation</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="http://bradfield.institute/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css">
+  <link rel="stylesheet" href="/algos/book.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.10/d3.min.js"></script>
+  <script src="/algos/language-switching.js"></script>
+  <script src="/algos/figures.js"></script>
+
+</head>
+<body>
+
+
+
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+
+  
+  
+    
+    
+  
+    
+    
+  
+
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+
+
+<div class="container">
+
+  <div class="page">
+    <div class="content">
+      <h1>
+        Big O Notation
+        <select id="language-switcher"></select>
+      </h1>
+      <p>When trying to characterize an algorithm’s efficiency in terms of
+execution time, independent of any particular program or computer, we
+must quantify the number of operations or steps that the algorithm will
+require. If each of these steps is considered to be a basic unit of
+computation, then the execution time for an algorithm can be expressed
+as the number of steps required to solve the problem.</p>
+<p>In our summation algorithms shown earlier, a good basic unit of
+computation  might be to count the number of assignment statements
+performed to compute the sum. In the function <code>sum_of_n</code>, the number of
+assignment statements is 1 (<code>the_sum = 0</code>) plus the value of <em>n</em> (the
+number of times we perform <code>the_sum=the_sum+i</code>). We can denote this by
+a function, call it T, where <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>=</mo><mn>1</mn><mo>+</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">T(n)=1 + n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mbin">+</span><span class="mord mathit">n</span></span></span></span>. The parameter <em>n</em> is often
+referred to as the “size of the problem,” and we can read this as “T(n)
+is the time it takes to solve a problem of size n, namely 1 + n steps.”</p>
+<p>In the summation functions given earlier, it makes sense to use the number
+of terms in the summation to denote the size of the problem. We can then
+say that the sum of the first 100,000 integers is a bigger instance of
+the summation problem than the sum of the first 1,000. Because of this,
+it might seem reasonable that the time required to solve the larger case
+would be greater than for the smaller case. Our goal then is to show how
+the algorithm’s execution time changes with respect to the size of the
+problem.</p>
+<p>Computer scientists prefer to take this analysis technique one step
+further. It turns out that the exact number of operations is not as
+important as determining the most dominant part of the <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> function.
+In other words, as the problem gets larger, some portion of the <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span>
+function tends to overpower the rest. This dominant term is what, in the
+end, is used for comparison. The <em>order of magnitude</em> function
+describes the part of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> that increases the fastest as the value of
+<em>n</em> increases. Order of magnitude is often called <em>big O</em> notation
+(for “order”) and written as <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>f</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>)</mo></mrow><annotation encoding="application/x-tex">O(f(n))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span>. It provides a useful
+approximation to the actual number of steps in the computation. The
+function <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">f(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> provides a simple representation of the dominant part of
+the original <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span>.</p>
+<p>In the above example, <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>=</mo><mn>1</mn><mo>+</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">T(n)=1+n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathrm">1</span><span class="mbin">+</span><span class="mord mathit">n</span></span></span></span>. As <em>n</em> gets large, the constant 1 will
+become less and less significant to the final result. If we are looking
+for an approximation for <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span>, then we can drop the 1 and simply say
+that the running time is <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span>. It is important to note that the 1 is
+certainly significant for <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span>. However, as <em>n</em> gets large, our
+approximation will be just as accurate without it.</p>
+<p>As another example, suppose that for some algorithm, the exact number of
+steps is <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>=</mo><mn>5</mn><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup><mo>+</mo><mn>2</mn><mn>7</mn><mi>n</mi><mo>+</mo><mn>1</mn><mn>0</mn><mn>0</mn><mn>5</mn></mrow><annotation encoding="application/x-tex">T(n)=5n^{2}+27n+1005</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathrm">5</span><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">2</span><span class="mord mathrm">7</span><span class="mord mathit">n</span><span class="mbin">+</span><span class="mord mathrm">1</span><span class="mord mathrm">0</span><span class="mord mathrm">0</span><span class="mord mathrm">5</span></span></span></span>. When <em>n</em> is small, say 1 or 2, the
+constant 1005 seems to be the dominant part of the function. However, as
+<em>n</em> gets larger, the <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">n^{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> term becomes the most important. In fact,
+when <em>n</em> is really large, the other two terms become insignificant in
+the role that they play in determining the final result. Again, to
+approximate <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> as <em>n</em> gets large, we can ignore the other terms and
+focus on <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>5</mn><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">5n^{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">5</span><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>. In addition, the coefficient <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>5</mn></mrow><annotation encoding="application/x-tex">5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.64444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">5</span></span></span></span> becomes
+insignificant as <em>n</em> gets large. We would say then that the function
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> has an order of magnitude <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>=</mo><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">f(n)=n^{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>, or simply that it is
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^{2})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span>.</p>
+<p>Although we do not see this in the summation example, sometimes the
+performance of an algorithm depends on the exact values of the data
+rather than simply the size of the problem. For these kinds of
+algorithms we need to characterize their performance in terms of best
+case, <em>worst case</em>, or <em>average case</em> performance. The worst case
+performance refers to a particular data set where the algorithm performs
+especially poorly. Whereas a different data set for the exact same
+algorithm might have extraordinarily good performance. However, in most
+cases the algorithm performs somewhere in between these two extremes
+(average case). It is important for a computer scientist to understand
+these distinctions so they are not misled by one particular case.</p>
+<p>A number of very common order of magnitude functions will come up over
+and over as you study algorithms. These are shown in
+the table below. In order to decide which of these
+functions is the dominant part of any <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> function, we must see how
+they compare with one another as <em>n</em> gets large.</p>
+<table>
+<thead>
+<tr>
+<th>f(n)</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.64444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">1</span></span></span></span></td>
+<td>Constant</td>
+</tr>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">log n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">n</span></span></span></span></td>
+<td>Logarithmic</td>
+</tr>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">n</span></span></span></span></td>
+<td>Linear</td>
+</tr>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mi>l</mi><mi>o</mi><mi>g</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">n log n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">n</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">n</span></span></span></span></td>
+<td>Log Linear</td>
+</tr>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">n^{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></td>
+<td>Quadratic</td>
+</tr>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mrow><mn>3</mn></mrow></msup></mrow><annotation encoding="application/x-tex">n^{3}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">3</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></td>
+<td>Cubic</td>
+</tr>
+<tr>
+<td><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mrow><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">2^{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.664392em;"></span><span class="strut bottom" style="height:0.664392em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathrm">2</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathit">n</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></td>
+<td>Exponential</td>
+</tr>
+</tbody>
+</table>
+<p>Below we show graphs of the common functions
+from the above table. Notice that when <code>n</code> is small, the
+functions are not very well defined with respect to one another. It is
+hard to tell which is dominant. However, as <code>n</code> grows, there is a
+definite relationship and it is easy to see how they compare with one
+another.</p>
+<p>
+  <figure>
+    <img src="figures/big-o-plot.png" alt="Plot of common big O functions">
+    <figcaption>Plot of common big O functions</figcaption>
+  </figure></p>
+<p>As a final example, suppose that we have the fragment of Python code
+shown below. Although this program does
+not really do anything, it is instructive to see how we can take actual
+code and analyze performance.</p>
+  <pre><code class="language-python">a <span class="token operator" >=</span> <span class="token number" >5</span>
+b <span class="token operator" >=</span> <span class="token number" >6</span>
+c <span class="token operator" >=</span> <span class="token number" >10</span>
+<span class="token keyword" >for</span> i <span class="token keyword" >in</span> range<span class="token punctuation" >(</span>n<span class="token punctuation" >)</span><span class="token punctuation" >:</span>
+   <span class="token keyword" >for</span> j <span class="token keyword" >in</span> range<span class="token punctuation" >(</span>n<span class="token punctuation" >)</span><span class="token punctuation" >:</span>
+      x <span class="token operator" >=</span> i <span class="token operator" >*</span> i
+      y <span class="token operator" >=</span> j <span class="token operator" >*</span> j
+      z <span class="token operator" >=</span> i <span class="token operator" >*</span> j
+<span class="token keyword" >for</span> k <span class="token keyword" >in</span> range<span class="token punctuation" >(</span>n<span class="token punctuation" >)</span><span class="token punctuation" >:</span>
+   w <span class="token operator" >=</span> a <span class="token operator" >*</span> k <span class="token operator" >+</span> <span class="token number" >45</span>
+   v <span class="token operator" >=</span> b <span class="token operator" >*</span> b
+d <span class="token operator" >=</span> <span class="token number" >33</span>
+</code></pre>
+
+
+<p>The number of assignment operations is the sum of four terms. The first
+term is the constant 3, representing the three assignment statements at
+the start of the fragment. The second term is <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>3</mn><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">3n^{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">3</span><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span>, since there are
+three statements that are performed <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">n^{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> times due to the nested
+iteration. The third term is <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mi>n</mi></mrow><annotation encoding="application/x-tex">2n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.64444em;"></span><span class="strut bottom" style="height:0.64444em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathrm">2</span><span class="mord mathit">n</span></span></span></span>, two statements iterated <em>n</em> times.
+Finally, the fourth term is the constant 1, representing the final
+assignment statement. This gives us <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>=</mo><mn>3</mn><mo>+</mo><mn>3</mn><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup><mo>+</mo><mn>2</mn><mi>n</mi><mo>+</mo><mn>1</mn><mo>=</mo><mn>3</mn><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup><mo>+</mo><mn>2</mn><mi>n</mi><mo>+</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">T(n)=3+3n^{2}+2n+1=3n^{2}+2n+4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span><span class="mrel">=</span><span class="mord mathrm">3</span><span class="mbin">+</span><span class="mord mathrm">3</span><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">2</span><span class="mord mathit">n</span><span class="mbin">+</span><span class="mord mathrm">1</span><span class="mrel">=</span><span class="mord mathrm">3</span><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mbin">+</span><span class="mord mathrm">2</span><span class="mord mathit">n</span><span class="mbin">+</span><span class="mord mathrm">4</span></span></span></span>. By
+looking at the exponents, we can easily see that the <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">n^{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> term will
+be dominant and therefore this fragment of code is <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mrow><mn>2</mn></mrow></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^{2})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.8141079999999999em;"></span><span class="strut bottom" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathit">n</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">2</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span></span></span></span>. Note that
+all of the other terms as well as the coefficient on the dominant term
+can be ignored as <em>n</em> grows larger.</p>
+<p>
+  <figure>
+    <img src="figures/big-o-plot-2.png" alt="Comparing T(n) with common big O functions">
+    <figcaption>Comparing T(n) with common big O functions</figcaption>
+  </figure></p>
+<p>This diagram shows a few of the common big O
+functions as they compare with the <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> function discussed above. Note
+that <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> is initially larger than the cubic function. However, as n
+grows, the cubic function quickly overtakes <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span>. It is easy to see
+that <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">T(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathit">n</span><span class="mclose">)</span></span></span></span> then follows the quadratic function as <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit">n</span></span></span></span> continues to
+grow.</p>
+
+
+      <div class="navigation">
+        
+          Next:
+          <a href="/algos/analysis/an-anagram-detection-example">
+            An Anagram Detection Example
+          </a>
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="table-of-contents">
+    <h1>Practical Algorithms and&nbsp;Data&nbsp;Structures</h2>
+    <a href="/algos/">Introduction</a>
+
+    <div class="chapters">
+      
+        
+        <div class="chapter">
+          <h2>Analysis</h2>
+          <ol>
+          
+            
+            <li>
+              
+                <a href="/algos/analysis/introduction">Introduction to Algorithm Analysis</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                
+                Big O Notation
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/analysis/an-anagram-detection-example">An Anagram Detection Example</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/analysis/performance-of-python-types">Performance of Python Types</a>
+              
+            </li>
+          
+          </ol>
+        </div>
+      
+        
+        <div class="chapter">
+          <h2>Stacks</h2>
+          <ol>
+          
+            
+            <li>
+              
+                <a href="/algos/stacks/introduction">Introduction to Stacks</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/stacks/implementation">A Stack Implementation</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/stacks/balanced-parentheses">Balanced Parentheses</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/stacks/converting-number-bases">Converting Number Bases</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/stacks/infix-prefix-and-postfix-expressions">Infix, Prefix and Postfix Expressions</a>
+              
+            </li>
+          
+          </ol>
+        </div>
+      
+        
+        <div class="chapter">
+          <h2>Queues</h2>
+          <ol>
+          
+            
+            <li>
+              
+                <a href="/algos/queues/introduction">Introduction to Queues</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/queues/implementation">A Queue Implementation</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/queues/simulating-hot-potato">Simulating Hot Potato</a>
+              
+            </li>
+          
+          </ol>
+        </div>
+      
+        
+        <div class="chapter">
+          <h2>Deques</h2>
+          <ol>
+          
+            
+            <li>
+              
+                <a href="/algos/deques/implementation">A Deque Implementation</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/deques/palindrome-checker">Palindrome Checker</a>
+              
+            </li>
+          
+          </ol>
+        </div>
+      
+        
+        <div class="chapter">
+          <h2>Lists</h2>
+          <ol>
+          
+            
+            <li>
+              
+                <a href="/algos/lists/introduction">Introduction to Lists</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/lists/implementing-an-unordered-list">Implementing an Unordered List</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/lists/implementing-an-ordered-list">Implementing an Ordered List</a>
+              
+            </li>
+          
+          </ol>
+        </div>
+      
+        
+        <div class="chapter">
+          <h2>Recursion</h2>
+          <ol>
+          
+            
+            <li>
+              
+                <a href="/algos/recursion/introduction">Introduction to Recursion</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/recursion/calculating-the-sum-of-a-list-of-numbers">Calculating the Sum of a List of Numbers</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/recursion/the-three-laws-of-recursion">The Three Laws of Recursion</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/recursion/converting-an-integer-to-a-string">Converting an Integer to Any Base</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/recursion/tower-of-hanoi">Tower of Hanoi</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/recursion/dynamic-programming">Dynamic Programming</a>
+              
+            </li>
+          
+          </ol>
+        </div>
+      
+        
+        <div class="chapter">
+          <h2>Searching</h2>
+          <ol>
+          
+            
+            <li>
+              
+                <a href="/algos/searching/searching">Searching</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/searching/the-sequential-search">The Sequential Search</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/searching/the-binary-search">The Binary Search</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/searching/hashing">Hashing</a>
+              
+            </li>
+          
+          </ol>
+        </div>
+      
+        
+        <div class="chapter">
+          <h2>Trees</h2>
+          <ol>
+          
+            
+            <li>
+              
+                <a href="/algos/trees/introduction">Introduction to Trees</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/trees/representing-a-tree">Representing a Tree</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/trees/parse-trees">Parse Trees</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/trees/tree-traversals">Tree Traversals</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/trees/priority-queues-with-binary-heaps">Priority Queues with Binary Heaps</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/trees/binary-search-trees">Binary Search Trees</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/trees/avl-trees">AVL Trees</a>
+              
+            </li>
+          
+          </ol>
+        </div>
+      
+        
+        <div class="chapter">
+          <h2>Graphs</h2>
+          <ol>
+          
+            
+            <li>
+              
+                <a href="/algos/graphs/introduction">Introduction to Graphs</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/graphs/representing-a-graph">Representing a Graph</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/graphs/word-ladder">Word Ladders</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/graphs/knights-tour">A Knight’s Tour</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/graphs/depth-first-search">General Depth First Search</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/graphs/topological-sorting">Topological Sorting</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/graphs/dijkstras-algorithm">Shortest Path with Dijkstra’s Algorithm</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/graphs/strongly-connected-components">Strongly Connected Components</a>
+              
+            </li>
+          
+            
+            <li>
+              
+                <a href="/algos/graphs/prims-spanning-tree-algorithm">Prim’s Spanning Tree Algorithm</a>
+              
+            </li>
+          
+          </ol>
+        </div>
+      
+    </div>
+
+  </div>
+
+</div><!-- .container -->
+
+<svg id="svg-refs">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refx="0" refy="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="context-stroke" />
+    </marker>
+  </defs>
+</svg>
+
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-71655366-1', 'auto');
+ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+</body>
+</html>
